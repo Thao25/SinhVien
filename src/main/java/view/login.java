@@ -10,6 +10,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.management.relation.Role;
 import javax.swing.JOptionPane;
 import model.DatabaseConnection;
 
@@ -29,7 +30,7 @@ public class login extends javax.swing.JFrame {
                 String username = usernameText.getText();
                 String password = new String(passwordText.getPassword());
                 if (login(username, password)) {
-                    new home(username, password).setVisible(true);
+                    new SinhVien(username, password).setVisible(true);
                     dispose();
                 } else {
                     JOptionPane.showMessageDialog(null, "Tên đăng nhập hoặc mật khẩu sai.");
@@ -42,7 +43,7 @@ public class login extends javax.swing.JFrame {
 
     private boolean login(String username, String password) {
         try (Connection conn = DatabaseConnection.connect()) {
-            String query = "SELECT * FROM TaiKhoan WHERE username = ? AND password = ?";
+            String query = "SELECT * FROM TaiKhoan WHERE username = ? AND password = ? ";
             PreparedStatement stmt = conn.prepareStatement(query);
             stmt.setString(1, username);
             stmt.setString(2, password);
@@ -52,7 +53,7 @@ public class login extends javax.swing.JFrame {
             if (rs.next()) {
                 currentUser = username;
                 currentPassword = password;
-                // Lưu thông tin sinh viên đăng nhập
+              
                 return true;  // Đăng nhập thành công
             } else {
                 return false;  // Đăng nhập không thành công
